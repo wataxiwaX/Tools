@@ -1,0 +1,20 @@
+.button {
+  position: relative;
+  background: #FF5722;
+  color: #FFFFFF;
+  border-style: none;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  padding-left: 15px;
+  padding-right: 15px;
+  left: 30px;
+}
+
+.label {
+  background: #FF5722;
+  color: #FFFFFF;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
