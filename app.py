@@ -5,6 +5,8 @@ import thread
 from PIL import Image
 from glob import glob
 
+web.config.debug = False
+
 urls = (
     '/', 'index',
     '/result', 'result',
