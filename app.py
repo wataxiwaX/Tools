@@ -43,5 +43,5 @@ def removefile(filename):
     os.remove(filename)
 
 if __name__ == "__main__":
-    app = web.application(urls, globals())
-    app.run()
+    application = web.application(urls, globals())
+    application.run()
