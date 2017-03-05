@@ -2,7 +2,7 @@ FROM rhscl/python-27-rhel7
 
 MAINTAINER Ten "wataxiwax@gmail.com"
 
-EXPOSE 8000
+EXPOSE 80
 
 COPY . /opt/app-root/src
 
