@@ -1,4 +1,7 @@
+# coding:utf-8
+
 import web
+import cgi
 import time
 import os
 import thread
@@ -6,6 +9,9 @@ from PIL import Image
 from glob import glob
 
 web.config.debug = False
+
+# 限制上传图片大小5MB
+cgi.maxlen = 5 * 1024 * 1024
 
 urls = (
     '/', 'index',
@@ -19,7 +25,10 @@ class index:
         return render.index()
 
     def POST(self):
-        picture_convert(web.input(uploadfile = {}, targetformat = ''))
+        try:
+            picture_convert(web.input(uploadfile = {}, targetformat = ''))
+        except ValueError:
+            return "图片大小超过上限(5MB)"
 
 def picture_convert(upload):
     if upload['uploadfile'].filename:
