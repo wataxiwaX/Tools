@@ -5,6 +5,7 @@ import cgi
 import time
 import os
 import thread
+import filetype
 from PIL import Image
 from glob import glob
 
@@ -32,12 +33,15 @@ class index:
 
 def picture_convert(upload):
     if upload['uploadfile'].filename:
-        img = Image.open(upload['uploadfile'].file)
-        filedir = 'static/'
-        filepath = upload['uploadfile'].filename.replace('\\', '/')
-        filename = filedir + filepath.split('/')[-1].split('.')[0] + '.' + upload['targetformat']
-        img.convert('RGB').save(filename)
-        raise web.seeother('/result?name=' + filename)
+        if filetype.check_filetype(upload['uploadfile'].file, 'picture'):
+            img = Image.open(upload['uploadfile'].file)
+            filedir = 'static/'
+            filepath = upload['uploadfile'].filename.replace('\\', '/')
+            filename = filedir + filepath.split('/')[-1].split('.')[0] + '.' + upload['targetformat']
+            img.convert('RGB').save(filename)
+            raise web.seeother('/result?name=' + filename)
+        else:
+            return 'Error'
     else:
         raise web.seeother('/')
         
