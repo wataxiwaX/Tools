@@ -1,27 +1,112 @@
 <html>
 <head>
-    <title>Tools小站</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <title>Tools小站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/custom.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
+  </script>
 </head>
 
 <body>
-<h1><strong>Tools小站</strong></h1>
-<form method="POST" enctype="multipart/form-data" action="" id="uploadform">
-    <label class="label">图片格式转换</label>
-    <input type="file" name="uploadfile" />
-    <span>转换为</span>
-    <span>
-        <select name="targetformat">     
-            <option>bmp</option>
-            <option>gif</option>
-            <option>ico</option>
-            <option>jpg</option>
-            <option>pdf</option>
-            <option>png</option>
-            <option>tiff</option>
-        </select>
-    </span>
-    <button type="submit" class="button">提交</button>
-</form>
+  <div class="columns">
+
+    <div id="sidebar" class="column is-narrow">
+      <h1 style="padding: 1em; color: #ff5722; font-size: 36px">Tools小站</h1>
+      <div class="menu">
+        <p style="text-align: left; font-size: 20px;" class="menu-label">TOOLS</p>
+        <ul class="menu-list">
+          <li><a style="padding-left: 1em; font-size: 18px" href="http://tools.wataxiwax.xyz/picture" class="pure-menu-link">图片格式转换</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="column">
+      <form id="files" method="POST" enctype="multipart/form-data">
+        <label class="label">文件</label>
+        <div class="control">
+          <input id="filename" style="margin-right: 0px; font-size: 20px; text-align: center" placeholder="选择文件" disabled="disabled" />
+          <div class="fileUpload button">
+            <span>上传</span>
+            <input id="uploadfile" type="file" class="upload"/>
+          </div>
+        </div>
+        <label class="label">格式</label>
+        <p class="control">
+          <span class="select">
+            <select id="targetformat">
+              <option>bmp</option>
+              <option>gif</option>
+              <option>ico</option>
+              <option>jpg</option>
+              <option>pdf</option>
+              <option>png</option>
+              <option>tiff</option>
+            </select>
+          </span>
+        </p>
+        <button id="submit_btn" class="button is-primary">提交</button>
+      </form>
+    </div>
+
+    <div class="column">
+      <div id="result" class="box" style="display: none">
+        <p id="msg"></p>
+        <a id="urlpath" href='#'></a>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+
+    function sleep(time) {
+      return new Promise((resolve) => setTimeout(resolve, time));
+    };
+
+    document.getElementById("uploadfile").onchange = function () {
+      document.getElementById("filename").value = this.value.replace(/^.*\\/, "");
+    };
+
+    $$("#files").submit(function() {
+      document.getElementById("result").style.display = "block";
+      document.getElementById("msg").innerHTML = "等待中...";
+      var formData = new FormData();
+      formData.append('uploadfile', $$('#uploadfile')[0].files[0]);
+      formData.append('targetformat', $$('#targetformat').val())
+
+      $$.ajax({
+        url: '/',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          var msg = data.split("'")[1];
+
+          if(msg == "ok") {
+            var fileurl = data.split("'")[3];
+
+            document.getElementById("urlpath").href = fileurl;
+            document.getElementById("urlpath").innerHTML = fileurl.split("/")[1];
+            (async function() {
+                for(var i = 30; i > 0; i--) {
+                  document.getElementById("msg").innerHTML = i + "秒后删除文件...";
+                  await sleep(1000);
+                }
+                document.getElementById("result").style.display = "none";
+            })();
+          }
+          else if(data == "too_big") {
+            document.getElementById("msg").innerHTML = "文件大小超过5MB";
+          }
+          else if(data == "not_picture") {
+            document.getElementById("msg").innerHTML = "上传的文件不是图片或者是不支持的图片类型"
+          }
+        }
+      });
+
+      return false;
+    });
+  </script>
 </body>
 </html>

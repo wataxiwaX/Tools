@@ -16,7 +16,6 @@ cgi.maxlen = 5 * 1024 * 1024
 
 urls = (
     '/', 'index',
-    '/result', 'result',
 )
 
 render = web.template.render('templates/')
@@ -27,9 +26,9 @@ class index:
 
     def POST(self):
         try:
-            picture_convert(web.input(uploadfile = {}, targetformat = ''))
+            return picture_convert(web.input(uploadfile = {}, targetformat = ''))
         except ValueError:
-            return "图片大小超过上限(5MB)"
+            return 'too_big'
 
 def picture_convert(upload):
     if upload['uploadfile'].filename:
@@ -39,19 +38,15 @@ def picture_convert(upload):
             filepath = upload['uploadfile'].filename.replace('\\', '/')
             filename = filedir + filepath.split('/')[-1].split('.')[0] + '.' + upload['targetformat']
             img.convert('RGB').save(filename)
-            raise web.seeother('/result?name=' + filename)
+            thread.start_new_thread(removefile, (filename,))
+            return 'ok', filename
         else:
-            return 'Error'
+            return 'not_picture'
     else:
-        raise web.seeother('/')
+        return 'no_file'
         
-class result:
-    def GET(self):
-        tmp = web.input(name=None)
-        urlpath = '/' + tmp.name
-        filename = tmp.name.split('/')[-1]
-        thread.start_new_thread(removefile, (tmp.name,))
-        return render.result(urlpath, filename)
+    thread.start_new_thread(removefile, (tmp.name,))
+    return render.result(urlpath, filename)
 
 def removefile(filename):
     time.sleep(30)
