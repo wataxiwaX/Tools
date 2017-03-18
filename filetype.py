@@ -2,6 +2,7 @@
 
 import struct
 
+# 文件类型              jpeg↓      png↓        gif↓        bmp↓    tiff↓
 ftype = {'picture' : ['FFD8FF', '89504E47', '47494638', '424D', '49492A00']}
    
 def bytes2hex(bytes):  
@@ -13,7 +14,7 @@ def bytes2hex(bytes):
             hexstr += u"0"  
         hexstr += t  
     return hexstr.upper()  
-  
+
 def check_filetype(file, type): 
     for hcode in ftype[type]:
         numOfBytes = len(hcode) / 2 

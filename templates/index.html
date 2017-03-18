@@ -24,7 +24,7 @@
       <form id="files" method="POST" enctype="multipart/form-data">
         <label class="label">文件</label>
         <div class="control">
-          <input id="filename" style="margin-right: 0px; font-size: 20px; text-align: center" placeholder="选择文件" disabled="disabled" />
+          <input id="filename" style="margin-right: 0px; font-size: 20px; text-align: center" placeholder="图片不超过10MB" disabled="disabled" />
           <div class="fileUpload button">
             <span>上传</span>
             <input id="uploadfile" type="file" class="upload"/>
@@ -97,7 +97,7 @@
             })();
           }
           else if(data == "too_big") {
-            document.getElementById("msg").innerHTML = "文件大小超过5MB";
+            document.getElementById("msg").innerHTML = "文件大小超过10MB";
           }
           else if(data == "not_picture") {
             document.getElementById("msg").innerHTML = "上传的文件不是图片或者是不支持的图片类型"

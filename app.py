@@ -11,8 +11,8 @@ from glob import glob
 
 web.config.debug = False
 
-# 限制上传图片大小5MB
-cgi.maxlen = 5 * 1024 * 1024
+# 限制上传图片大小10MB
+cgi.maxlen = 10 * 1024 * 1024
 
 urls = (
     '/', 'index',
@@ -30,6 +30,7 @@ class index:
         except ValueError:
             return 'too_big'
 
+# 图片格式转换
 def picture_convert(upload):
     if upload['uploadfile'].filename:
         if filetype.check_filetype(upload['uploadfile'].file, 'picture'):
@@ -44,10 +45,8 @@ def picture_convert(upload):
             return 'not_picture'
     else:
         return 'no_file'
-        
-    thread.start_new_thread(removefile, (tmp.name,))
-    return render.result(urlpath, filename)
 
+# 删除上传的文件
 def removefile(filename):
     time.sleep(30)
     os.remove(filename)
