@@ -2,6 +2,7 @@
 <head>
   <title>Tools小站</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="static/css/custom.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
   </script>
@@ -9,107 +10,42 @@
 
 <body>
   <div class="columns">
-
     <div id="sidebar" class="column is-narrow">
-      <h1 style="padding: 1em; color: #ff5722; font-size: 36px">Tools小站</h1>
+      <a class="nav-item" href="/">
+        <h1 style="padding: 1em; padding-bottom: 0.3em; color: #ff5722; font-size: 36px">Tools小站</h1>
+      </a>
+      <span class="icon">
+        <a href="https://github.com/wataxiwaX">\
+          <i class="fa fa-github"></i>
+        </a>
+      </span>
+      <span class="icon">
+        <a href="https://wataxiwax.github.io">\
+          <i class="fa fa-rss"></i>
+        </a>
+      </span>
       <div class="menu">
         <p style="text-align: left; font-size: 20px;" class="menu-label">TOOLS</p>
         <ul class="menu-list">
-          <li><a style="padding-left: 1em; font-size: 18px" href="http://tools.wataxiwax.xyz/picture" class="pure-menu-link">图片格式转换</a></li>
+          <li><a style="padding-left: 1em; font-size: 18px" href="picture" class="pure-menu-link">图片格式转换</a></li>
         </ul>
       </div>
     </div>
 
-    <div class="column">
-      <form id="files" method="POST" enctype="multipart/form-data">
-        <label class="label">文件</label>
-        <div class="control">
-          <input id="filename" style="margin-right: 0px; font-size: 20px; text-align: center" placeholder="图片不超过10MB" disabled="disabled" />
-          <div class="fileUpload button">
-            <span>上传</span>
-            <input id="uploadfile" type="file" class="upload"/>
-          </div>
-        </div>
-        <label class="label">格式</label>
-        <p class="control">
-          <span class="select">
-            <select id="targetformat">
-              <option>bmp</option>
-              <option>gif</option>
-              <option>ico</option>
-              <option>jpg</option>
-              <option>pdf</option>
-              <option>png</option>
-              <option>tiff</option>
-            </select>
-          </span>
-        </p>
-        <button id="submit_btn" class="button is-primary">提交</button>
-      </form>
-    </div>
-
-    <div class="column">
-      <div id="result" class="box" style="display: none">
-        <p id="msg"></p>
-        <a id="urlpath" href='#'></a>
-      </div>
+    <div class="column index-div">
+      <div style="width: 80%; height: auto; position: relative; top: calc(50% - 20%); left: 10%; text-align: center">
+        <span style="margin: 0.2em; font-size: 10em; color: #ff5722; position: relative; text-align: center; display: inline-block">T</span>
+        <span style="margin: 0.2em; font-size: 10em; color: #ffeb3b; position: relative; text-align: center; display: inline-block">o</span>
+        <span style="margin: 0.2em; font-size: 10em; color: #607d8b; position: relative; text-align: center; display: inline-block">o</span>
+        <span style="margin: 0.2em; font-size: 10em; color: #3f51b5; position: relative; text-align: center; display: inline-block">l</span>
+        <span style="margin: 0.2em; font-size: 10em; color: #9c27b0; position: relative; text-align: center; display: inline-block">s</span>
+      </div> 
     </div>
   </div>
 
   <script type="text/javascript">
-
-    function sleep(time) {
-      return new Promise((resolve) => setTimeout(resolve, time));
-    };
-
-    document.getElementById("uploadfile").onchange = function () {
-      document.getElementById("filename").value = this.value.replace(/^.*\\/, "");
-    };
-
-    $$("#files").submit(function() {
-      document.getElementById("result").style.display = "block";
-      if(document.getElementById("filename").value == "") {
-        document.getElementById("msg").innerHTML = "请选择文件";
-        return false;
-      }
-      document.getElementById("msg").innerHTML = "等待中...";
-      var formData = new FormData();
-      formData.append('uploadfile', $$('#uploadfile')[0].files[0]);
-      formData.append('targetformat', $$('#targetformat').val())
-
-      $$.ajax({
-        url: '/',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-          var msg = data.split("'")[1];
-
-          if(msg == "ok") {
-            var fileurl = data.split("'")[3];
-
-            document.getElementById("urlpath").href = fileurl;
-            document.getElementById("urlpath").innerHTML = fileurl.split("/")[1];
-            (async function() {
-                for(var i = 30; i > 0; i--) {
-                  document.getElementById("msg").innerHTML = i + "秒后删除文件...";
-                  await sleep(1000);
-                }
-                document.getElementById("result").style.display = "none";
-            })();
-          }
-          else if(data == "too_big") {
-            document.getElementById("msg").innerHTML = "文件大小超过10MB";
-          }
-          else if(data == "not_picture") {
-            document.getElementById("msg").innerHTML = "上传的文件不是图片或者是不支持的图片类型"
-          }
-        }
-      });
-
-      return false;
+    $$("#menus").click(function() {
+        $$("#sidebar").toggle();
     });
   </script>
 </body>

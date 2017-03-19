@@ -16,6 +16,7 @@ cgi.maxlen = 10 * 1024 * 1024
 
 urls = (
     '/', 'index',
+    '/picture', 'picture',
 )
 
 render = web.template.render('templates/')
@@ -24,6 +25,10 @@ class index:
     def GET(self):
         return render.index()
 
+class picture:
+    def GET(self):
+        return render.picture()
+        
     def POST(self):
         try:
             return picture_convert(web.input(uploadfile = {}, targetformat = ''))

@@ -24,3 +24,8 @@
     opacity: 0;
     filter: alpha(opacity=0);
 }
+
+.index-div {
+    height: 100%;
+    position: relative;
+}
