@@ -56,6 +56,10 @@ def removefile(filename):
     time.sleep(30)
     os.remove(filename)
 
+application = web.application(urls, globals()).wsgifunc()
 if __name__ == "__main__":
-    application = web.application(urls, globals())
-    application.run()
+    from wsgiref.simple_server import make_server
+    httpd = make_server('localhost', 8080, application)
+    httpd.handle_request()
+    app = web.application(urls, globals())
+    app.run()
