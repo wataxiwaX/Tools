@@ -1,2 +1,2 @@
-Pillow
-web.py
+Pillow==4.0.0
+web.py==0.38
