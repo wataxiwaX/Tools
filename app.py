@@ -17,6 +17,7 @@ cgi.maxlen = 10 * 1024 * 1024
 urls = (
     '/', 'index',
     '/picture', 'picture',
+    '/colors', 'colors',
 )
 
 render = web.template.render('templates/')
@@ -34,6 +35,10 @@ class picture:
             return picture_convert(web.input(uploadfile = {}, targetformat = ''))
         except ValueError:
             return 'too_big'
+
+class colors:
+    def GET(self):
+        return render.colors()
 
 # 图片格式转换
 def picture_convert(upload):

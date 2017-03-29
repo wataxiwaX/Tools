@@ -1,0 +1,81 @@
+<html>
+<head>
+  <title>Tools小站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="static/css/custom.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
+  </script>
+</head>
+
+<body  onload="deploy()">
+  <div class="columns">
+    <div id="sidebar" class="column is-narrow">
+      <a class="nav-item" href="/">
+        <h1 style="padding: 1em; padding-bottom: 0.3em; color: #ff5722; font-size: 36px">Tools小站</h1>
+      </a>
+      <span class="icon">
+        <a href="https://github.com/wataxiwaX">\
+          <i class="fa fa-github"></i>
+        </a>
+      </span>
+      <span class="icon">
+        <a href="https://wataxiwax.github.io">\
+          <i class="fa fa-rss"></i>
+        </a>
+      </span>
+      <div class="menu">
+        <p style="text-align: left; font-size: 20px;" class="menu-label">TOOLS</p>
+        <ul class="menu-list">
+          <li><a style="padding-left: 1em; font-size: 18px" href="picture">图片格式转换</a></li>
+          <li><a style="padding-left: 1em; font-size: 18px" href="colors" class="is-active">取色器</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="column is-narrow" style="padding-right: 2em;">
+      <p id="menus" class="button is-primary" style="cursor: pointer" onclick="">
+        <i class="fa fa-bars"></i>
+      </p>
+    </div>
+
+    <div id="color-list" class="column">
+    </div>
+  </div>
+
+<script type="text/javascript">
+    function deploy() {
+        var tmp, colorR, colorG, colorB;
+        for(colorR = 0; colorR < 256; colorR += 23) {
+            for(colorG = 0; colorG < 256; colorG += 23) {
+                for(colorB = 0; colorB < 256; colorB += 23) {
+                    tmp = '<span class="button" style="background:rgb(' + String(colorR) + "," + String(colorG) + "," + String(colorB) + ');"></span>';
+                    jQuery("#color-list").append(tmp);
+                }
+            }
+        }
+        jQuery("#color-list").append('<p><span id="rgb-view" class="button"></span>r:<input id="rgb-r" type="text" />g:<input id="rgb-g" type="text" />b:<input id="rgb-b" type="text" /></p><p>hex:<input id="hex-val" /></p>')
+        jQuery(document).on("click", "#color-list > span", function() {
+            var rgb = jQuery(this).css('background-color');
+            jQuery("#rgb-view").css("background-color",rgb);
+            jQuery("#rgb-r").val(rgb.split("(")[1].split(",")[0]);
+            jQuery("#rgb-g").val(rgb.split("(")[1].split(",")[1]);
+            jQuery("#rgb-b").val(rgb.split("(")[1].split(",")[2].split(")")[0]);
+            jQuery("#hex-val").val(rgbToHex(Number(jQuery("#rgb-r").val()), Number(jQuery("#rgb-g").val()), Number(jQuery("#rgb-b").val())));
+        });
+    }
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    jQuery("#menus").click(function() {
+        jQuery("#sidebar").toggle();
+    });
+</script>
+</body>
+</html>
