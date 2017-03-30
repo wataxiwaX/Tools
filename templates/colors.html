@@ -56,16 +56,41 @@
                 }
             }
         }
-        jQuery("#color-list").append('<p><span id="rgb-view" class="button"></span>r:<input id="rgb-r" type="text" />g:<input id="rgb-g" type="text" />b:<input id="rgb-b" type="text" /></p><p>hex:<input id="hex-val" /></p>')
+        jQuery("#color-list").append('<p style="font-size:30px">\
+                                        <span>\
+                                          R:\
+                                          <input id="rgb-r" type="text" style="font-size:30px"/>\
+                                        </span>\
+                                        <span>\
+                                          G:\
+                                          <input id="rgb-g" type="text" style="font-size:30px"/>\
+                                        </span>\
+                                        <span>\
+                                          B:\
+                                          <input id="rgb-b" type="text" style="font-size:30px"/>\
+                                        </span>\
+                                        <span id="rgb-view" class="button is-large" />\
+                                        <p style="font-size:30px">hex:<input id="hex-val" style="font-size:30px"/></p>\
+                                      </p>');
         jQuery(document).on("click", "#color-list > span", function() {
             var rgb = jQuery(this).css('background-color');
-            jQuery("#rgb-view").css("background-color",rgb);
+            jQuery("#rgb-view").css("background-color", rgb);
             jQuery("#rgb-r").val(rgb.split("(")[1].split(",")[0]);
             jQuery("#rgb-g").val(rgb.split("(")[1].split(",")[1]);
             jQuery("#rgb-b").val(rgb.split("(")[1].split(",")[2].split(")")[0]);
             jQuery("#hex-val").val(rgbToHex(Number(jQuery("#rgb-r").val()), Number(jQuery("#rgb-g").val()), Number(jQuery("#rgb-b").val())));
         });
+        jQuery(document).on("paste keyup", "#hex-val", function() {
+            jQuery("#rgb-view").css("background-color",jQuery(this).val());
+            jQuery("#rgb-r").val(hex2rgb(jQuery(this).val())[0]);
+            jQuery("#rgb-g").val(hex2rgb(jQuery(this).val())[1]);
+            jQuery("#rgb-b").val(hex2rgb(jQuery(this).val())[2]);
+        });
+        jQuery(document).on("paste keyup", "#rgb-r", rgbChange);
+        jQuery(document).on("paste keyup", "#rgb-g", rgbChange);
+        jQuery(document).on("paste keyup", "#rgb-b", rgbChange);
     }
+
     function componentToHex(c) {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
@@ -73,6 +98,20 @@
 
     function rgbToHex(r, g, b) {
         return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    function hex2rgb(hexStr){
+      // note: hexStr should be #rrggbb
+      var hex = parseInt(hexStr.substring(1), 16);
+      var r = (hex & 0xff0000) >> 16;
+      var g = (hex & 0x00ff00) >> 8;
+      var b = hex & 0x0000ff;
+      return [r, g, b];
+    }
+
+    function rgbChange() {
+      jQuery("#hex-val").val(rgbToHex(Number(jQuery("#rgb-r").val()), Number(jQuery("#rgb-g").val()), Number(jQuery("#rgb-b").val())));
+      jQuery("#rgb-view").css("background-color", jQuery("#hex-val").val());
     }
 
     jQuery("#menus").click(function() {
